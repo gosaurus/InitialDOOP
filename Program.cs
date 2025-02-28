@@ -1,4 +1,6 @@
-﻿namespace Program
+﻿using System.Runtime.CompilerServices;
+
+namespace Program
 {
     public class Program
     {
@@ -8,31 +10,44 @@
 
             Console.WriteLine("Let's create some lonely drivers...");
             
-            var m1 = new Member("Takumi", "86", "");
-            var m2 = new Member("KT", "Mazda", "RedSuns");
-            var m3 = new Member("Ryosuke", "Mazda", "Redsuns");
-            var m4 = new Member("Itsuki", "Levin", "SpeedStars");
-            var m5 = new Member("Bunta", "86", "");
-            
-            //https://dzone.com/articles/different-ways-of-creating-list-of-objects-in-c
-            List<Member> redSunsMembers = [];
-            redSunsMembers.AddRange([m2, m3]);
+            List<Member> allMembers = [
+                new Member(name: "Takumi", car: "Toyota AE86 Trueno", team: "Fujiwara Tofu"),
+                new Member("KT", "Mazda", "RedSuns"),
+                new Member("Ryosuke", "Mazda", "Redsuns"),
+                new Member("Itsuki", "Levin", "SpeedStars"),
+                new Member("Bunta", "Toyota AE86 Trueno", "Fujiwara Tofu"),
+                new Member("Nakazato", "Nissan Skyline", "NightKids"),
+                new Member("Shingo Shinsuke", "Honda Civic", "NightKids"),
+                new Member("Sudo Kyoichi", "LanEvo", "Emperors"),
+                new Member("Mako Sako", "Sileighty", "Impact Blue"),
+            ];
 
-            //check that members list exists
-            foreach (var member in redSunsMembers)
+            Dictionary<string , Team> teamsDict = 
+                new Dictionary<string, Team>();
+                
+            foreach (var member in allMembers)
             {
-                Console.WriteLine(member);
+                if (!teamsDict.ContainsKey(member.TeamName))
+                {
+                    Team team = new Team(teamname: member.TeamName, homeCourse: null);
+                    teamsDict.Add(member.TeamName, team);
+                    team.AddMember(member);
+                }
+                else 
+                {
+                    var team = teamsDict[member.TeamName];
+                    team.AddMember(member);
+                }
             }
-
-            var RedSunsTeam = new Team("RedSuns", "Akagi Pass", redSunsMembers);
-
-            //check that the Team exists(displays team member count)
-            Console.WriteLine(RedSunsTeam);
-
-            //check the optional parameters
-            Console.WriteLine("Characters who don't belong in any team:");
-            Console.WriteLine($"{m1}, {m5}");
+            Console.WriteLine("Outputting the teams dictionary");
+            foreach (KeyValuePair<string, Team> kvp in teamsDict)
+            {
+                Console.WriteLine($"Team {kvp.Key}");
+                foreach (var member in kvp.Value.Members)
+                {
+                    Console.WriteLine($"\t{member}");
+                }
+            }
         }
-
     }
 }

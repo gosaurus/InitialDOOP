@@ -4,11 +4,11 @@ public class Member
     public string Car { get; }
     public string? TeamName { get; }
 
-    public Member (string name, string car, string team="")
+    public Member (string name, string car, string? team)
     {
         Name = name;
         Car = car;
-        TeamName = "";
+        TeamName = team;
     }
 
     public override string ToString()
